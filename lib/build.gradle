@@ -42,7 +42,7 @@ bintray {
     publish = true
     pkg {
         repo = 'maven'
-        name = "OMSLib"
+        name = "LibreSubstratumService"
         publish = true
         publicDownloadNumbers = true
         version {
