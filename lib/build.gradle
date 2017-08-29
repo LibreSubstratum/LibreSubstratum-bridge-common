@@ -56,8 +56,8 @@ bintray {
 publishing {
     publications {
         MyPublication(MavenPublication) {
-            groupId 'com.jereksel'
-            artifactId 'omslib'
+            groupId 'com.libresubstratum'
+            artifactId 'service'
             version libraryVersion
             artifact "${project.buildDir}/outputs/aar/${project.getName()}-release.aar"
             artifact sourcesJar
