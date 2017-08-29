@@ -42,6 +42,7 @@ bintray {
     publish = true
     pkg {
         repo = 'maven'
+        userOrg = "libresubstratum"
         name = "LibreSubstratumService"
         publish = true
         publicDownloadNumbers = true
