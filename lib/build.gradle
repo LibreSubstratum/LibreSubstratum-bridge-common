@@ -1,11 +1,26 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+def tag = System.getenv("TRAVIS_TAG") ?: "a"
+//Remove v from vVERSIONNUMBER
+def libraryVersion = tag.substring(1)
 
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
 
     defaultConfig {
-        minSdkVersion 20
+        minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -21,11 +36,40 @@ android {
     }
 }
 
+bintray {
+    user = System.getenv('BINTRAY_USER') ?: "b"
+    key = System.getenv('BINTRAY_KEY') ?: "c"
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = "OMSLib"
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            name = "$libraryVersion"
+            vcsTag = "$tag"
+        }
+    }
+    publications = ['MyPublication']
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            groupId 'com.jereksel'
+            artifactId 'omslib'
+            version libraryVersion
+            artifact "${project.buildDir}/outputs/aar/${project.getName()}-release.aar"
+            artifact sourcesJar
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    })
-//    compile 'com.android.support:appcompat-v7:26.+'
-//    testCompile 'junit:junit:4.12'
 }

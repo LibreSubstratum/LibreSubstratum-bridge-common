@@ -1,0 +1,32 @@
+language: android
+
+sudo: false
+
+jdk:
+ - oraclejdk8
+
+android:
+  components:
+    - tools
+    - build-tools-25.0.0
+    - android-25
+    - extra-google-m2repository
+    - extra-android-m2repository
+  licenses:
+    - '.+'
+
+script:
+    - ./gradlew clean assembleRelease
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./gradlew :lib:publish :lib:generatePomFileForMyPublicationPublication :lib:bintrayUpload
+  on:
+    tags: true
+    all_branches: false
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
